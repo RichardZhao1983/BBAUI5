@@ -1,0 +1,10 @@
+/.idea
+/.classpath
+/.project
+/.settings/
+/target/
+/logs/
+.DS_Store
+dist
+node_modules
+build

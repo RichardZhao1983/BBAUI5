@@ -1,0 +1,55 @@
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+	<edmx:DataServices m:DataServiceVersion="1.0" m:MaxDataServiceVersion="3.0"
+					   xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+					   xmlns:sap="http://www.sap.com/Protocols/SAPData">
+		<Schema Namespace="NorthwindModel" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+			<EntityType Name="Invoice">
+				<Key>
+					<PropertyRef Name="ProductName"/>
+					<PropertyRef Name="Quantity"/>
+					<PropertyRef Name="ShipperName"/>
+				</Key>
+				<Property Name="ShipperName" Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"
+						  Unicode="true"/>
+				<Property Name="ProductName" Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"
+						  Unicode="true"/>
+				<Property Name="Quantity" Type="Edm.Int16" Nullable="false"/>
+				<Property Name="ExtendedPrice" Type="Edm.Decimal" Precision="19" Scale="4"/>
+			</EntityType>
+			<EntityType Name="Attachment" m:HasStream="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="refGuid"/>
+                    <PropertyRef Name="loioId"/>
+                    <PropertyRef Name="phioId"/>
+                </Key>
+                <Property Name="refGuid" Type="Edm.Guid" Nullable="false" sap:label="Guid" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="loioId" Type="Edm.String" Nullable="false" MaxLength="32" sap:label="Object ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="phioId" Type="Edm.String" Nullable="false" MaxLength="32" sap:label="Object ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="documentId" Type="Edm.String" Nullable="false" MaxLength="132" sap:label="DOCUMENT_ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="fileName" Type="Edm.String" Nullable="false" MaxLength="255" sap:label="Component name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="fileSize" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="Size/dim." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="mimeType" Type="Edm.String" Nullable="false" MaxLength="128" sap:label="MIME type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="language" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Language" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="uploadDateFormatted" Type="Edm.String" Nullable="false" MaxLength="20" sap:label="Upload Date (formatted)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="uploadDate" Type="Edm.DateTime" Nullable="false" Precision="0" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="userName" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="User Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="contributor" Type="Edm.String" Nullable="false" MaxLength="255" sap:label="User Name (full)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="document" Type="Edm.Binary" Nullable="false" sap:label="DOCUMENT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="thumbnailUrl" Type="Edm.String" Nullable="false" MaxLength="4096" sap:label="Thumbnail Url" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="enableEdit" Type="Edm.Boolean" Nullable="false" sap:label="Enable Edit Switch" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="enableDelete" Type="Edm.Boolean" Nullable="false" sap:label="Enable Delete Switch" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="visibleDelete" Type="Edm.Boolean" Nullable="false" sap:label="Visible Delete Switch" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="visibleEdit" Type="Edm.Boolean" Nullable="false" sap:label="Visible Edit Switch" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="url" Type="Edm.String" Nullable="false" MaxLength="4096" sap:label="URL" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="MessageResultSet" Relationship="AI_CRM_GW_MYMESSAGE_SRV.MessageAttachment" FromRole="ToRole_MessageAttachment" ToRole="FromRole_MessageAttachment"/>
+            </EntityType>
+		</Schema>
+		<Schema Namespace="ODataWebV2.Northwind.Model" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+			<EntityContainer Name="NorthwindEntities" m:IsDefaultEntityContainer="true" p6:LazyLoadingEnabled="true"
+							 xmlns:p6="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+				<EntitySet Name="Invoices" EntityType="NorthwindModel.Invoice"/>
+				<EntitySet Name="AttachmentSet" EntityType="NorthwindModel.Attachment" sap:searchable="true" sap:content-version="1"/>
+			</EntityContainer>
+		</Schema>
+	</edmx:DataServices>
+</edmx:Edmx>
