@@ -1,6 +1,5 @@
 "use strict";
-
-var rfc = require("node-rfc");
+;
 var fs = require("fs");
 
 module.exports = function(grunt) {
