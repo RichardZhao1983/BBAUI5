@@ -81,6 +81,8 @@ module.exports = function(grunt) {
         });
     };*/
 
+    grunt.loadNpmTasks("grunt-zip");
+
     grunt.registerTask("createZip", ["zip"]);
 
     grunt.registerTask("uploadToABAP", "Uploads the application to the ABAP System", function(transportRequest) {
