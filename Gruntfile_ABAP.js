@@ -19,8 +19,9 @@ module.exports = function(grunt) {
     var gitCommit = process.env.GIT_COMMIT;
 
     // Global Variables
-    var distDir = "dist";
-    var zipFileSuffix = "-opt-static-abap.zip";
+    var zipDir = "dist";
+    var zipFileSuffix = ".zip";
+    var tmpDir = zipDir + "/tmp";
 
     // Project configuration.
     var abapConn = {
@@ -33,10 +34,17 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
+        zip: {
+            build: {
+                cwd: tmpDir,
+                src:  "dist/**/*",
+                dest: "dist" + zipFileSuffix
+            }
+        },
         uploadToABAP: {
             options: {
                 conn: abapConn,
-                distURL: distDir + "/*.*",
+                zipFileURL: "dist.zip",
                 codePage: "UTF8"
             }
         }
@@ -73,6 +81,7 @@ module.exports = function(grunt) {
         });
     };*/
 
+    grunt.registerTask("createZip", ["zip"]);
 
     grunt.registerTask("uploadToABAP", "Uploads the application to the ABAP System", function(transportRequest) {
         grunt.log.writeln("ConnInformation",this.options().conn);
@@ -81,7 +90,7 @@ module.exports = function(grunt) {
             grunt.log.errorlns("No Transport request specified. Pass one explicitly or run createTransportRequest first.");
             return (false);
         }
-        var url = this.options().distURL;
+        var url = this.options().zipFileURL;
         var importParameters = {
             IV_URL: url,
             IV_SAPUI5_APPLICATION_NAME: abapApplicationName,
