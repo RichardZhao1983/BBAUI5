@@ -1,5 +1,6 @@
 "use strict";
-;
+
+//var rfc = require("node-rfc");
 var fs = require("fs");
 
 module.exports = function(grunt) {
@@ -18,10 +19,8 @@ module.exports = function(grunt) {
     var gitCommit = process.env.GIT_COMMIT;
 
     // Global Variables
-    var targetDir = "target";
+    var distDir = "dist";
     var zipFileSuffix = "-opt-static-abap.zip";
-    var ctsDataFile = targetDir + "/CTS_Data.txt";
-    var nexusGroupId = "com.yourcompany";
 
     // Project configuration.
     var abapConn = {
@@ -31,25 +30,85 @@ module.exports = function(grunt) {
         sysnr: abapDevelopmentInstance,
         client: abapDevelopmentClient
     };
+
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
         uploadToABAP: {
             options: {
                 conn: abapConn,
-                zipFile: targetDir + "/<%= pkg.name %>" + zipFileSuffix,
-                zipFileURL: nexusSnapshotRepoURL + "/" + nexusGroupId.replace(/\./g, "/") + "/<%= pkg.name %>/<%= pkg.version %>-SNAPSHOT/<%= pkg.name %>-<%= pkg.version %>-SNAPSHOT.zip",
+                distURL: targetDir + "/*.*"
                 codePage: "UTF8"
             }
         }
         
     });
 
+    
+    /*var rfcConnect = function(functionModule, importParameters, gruntContext) {
+        return new Promise(function(resolve, reject) {
+        var conn = gruntContext.options().conn;
+        var client = new rfc.Client(conn);
+
+        grunt.log.writeln("RFC client lib version:", client.getVersion());
+
+        client.connect(function(err) {
+            if (err) { // check for login/connection errors
+                grunt.log.errorlns("could not connect to server", err);
+                return reject();
+            }
+            // invoke remote enabled ABAP function module
+            grunt.log.writeln("Invoking function module", functionModule);
+            client.invoke(functionModule,
+                importParameters,
+                function(err, res) {
+                    if (err) { // check for errors (e.g. wrong parameters)
+                        grunt.log.errorlns("Error invoking", functionModule, err);
+                        return reject();
+                    }
+                    client.close();
+                    grunt.log.writeln("Messages:", res.EV_LOG_MESSAGES);
+                    return resolve(res);
+                });
+            });
+        });
+    };*/
+
+
     grunt.registerTask("uploadToABAP", "Uploads the application to the ABAP System", function(transportRequest) {
-        grunt.log.writeln("transportRequest",transportRequest);
-        grunt.log.writeln("abapDevelopmentServer",abapDevelopmentServer);
-        grunt.log.writeln("abapDevelopmentInstance",abapDevelopmentInstance);
-        grunt.log.writeln("abapDevelopmentUser",abapDevelopmentUser);
-        grunt.log.writeln("zipFile",this.options().zipFile);
-        
+        grunt.log.writeln("ConnInformation",this.options().conn);
+        grunt.log.writeln("Uploading to ABAP");
+        if (!transportRequest) {
+            grunt.log.errorlns("No Transport request specified. Pass one explicitly or run createTransportRequest first.");
+            return (false);
+        }
+        var url = this.options().distURL;
+        var importParameters = {
+            IV_URL: url,
+            IV_SAPUI5_APPLICATION_NAME: abapApplicationName,
+            IV_SAPUI5_APPLICATION_DESC: abapApplicationDesc,
+            IV_PACKAGE: abapPackage,
+            IV_WORKBENCH_REQUEST: transportRequest,
+            IV_TEST_MODE: "-",
+            IV_EXTERNAL_CODE_PAGE: this.options().codePage
+        };
+        var done = this.async();
+        grunt.log.writeln("Uploading application from", url);
+       
+        /*rfcConnect("/UI5/UI5_REPOSITORY_LOAD_HTTP", importParameters, this).then(
+            function(returnValue) {
+                if (returnValue.EV_SUCCESS == "E" || returnValue.EV_SUCCESS == "W") {
+                    grunt.log.errorlns("Error invoking", "/UI5/UI5_REPOSITORY_LOAD_HTTP");
+                    grunt.log.errorlns("Message Id:", returnValue.EV_MSG_ID);
+                    grunt.log.errorlns("Message No:", returnValue.EV_MSG_NO);
+                    grunt.log.errorlns("Messages:", returnValue.EV_LOG_MESSAGES);
+                    done(false);
+                    return;
+                }
+                grunt.log.writeln("Application uploaded.");
+                done();
+            },
+            function() {
+                done(false);
+        });*/
     });
 };
