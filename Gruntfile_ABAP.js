@@ -36,7 +36,7 @@ module.exports = function(grunt) {
         uploadToABAP: {
             options: {
                 conn: abapConn,
-                distURL: targetDir + "/*.*",
+                distURL: distDir + "/*.*",
                 codePage: "UTF8"
             }
         }
