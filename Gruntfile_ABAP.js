@@ -36,15 +36,15 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON("package.json"),
         zip: {
             build: {
-                cwd: tmpDir,
-                src:  "dist/**/*",
-                dest: "dist" + zipFileSuffix
+                cwd:  zipDir + "/",
+                src:  zipDir + "/**/*",
+                dest: zipDir + zipFileSuffix
             }
         },
         uploadToABAP: {
             options: {
                 conn: abapConn,
-                zipFileURL: "dist.zip",
+                zipFileURL: zipDir + zipFileSuffix,
                 codePage: "UTF8"
             }
         }
