@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage("Checkout") {
             steps {
-                cleanws()
+                cleanWs()
                 checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'GITHUB_ACCOUNT', url: 'https://github.com/RichardZhao1983/BBAUI5.git']]])   
             }
         }
