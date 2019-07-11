@@ -41,8 +41,8 @@ pipeline {
     }
  
     post {
-        failure {
-            
+        always {
+            echo 'Testing..'        
         }
     }
 }
