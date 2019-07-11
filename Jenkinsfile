@@ -1,7 +1,7 @@
 #!groovy​
 pipeline {
-    agent any
- 
+    //agent any
+ 	agent { label 'slave-linux' }
     stages {
 
         stage("Clean") {
